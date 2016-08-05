@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 
 /**
  * Creator: vbarad
@@ -50,9 +51,23 @@ public class SubBrokersServlet extends HttpServlet {
     });
     Collections.sort(subBrokers, (s1, s2) -> s1.getName().compareTo(s2.getName()));
 
+    HashMap<Character, ArrayList<SubBroker>> mapSubBrokers = new HashMap<>();
+    for (SubBroker s : subBrokers) {
+      char key = Character.toUpperCase(s.getName().charAt(0));
+      if (!mapSubBrokers.keySet().contains(key)) {
+        mapSubBrokers.put(key, new ArrayList<>());
+      }
+      mapSubBrokers.get(key).add(s);
+    }
+
+    JSONObject categorizedSubBrokers = new JSONObject();
+    for (char key : mapSubBrokers.keySet()) {
+      categorizedSubBrokers.put(Character.toString(key), new JSONArray((new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create()).toJson(mapSubBrokers.get(key))));
+    }
+
     JSONObject responseJson = new JSONObject();
     responseJson.put("status", 200);
-    responseJson.put("message", new JSONArray((new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create()).toJson(subBrokers)));
+    responseJson.put("message", categorizedSubBrokers);
 
     PrintWriter responseWriter = response.getWriter();
 

@@ -32,6 +32,10 @@
         <servlet-name>BranchesServlet</servlet-name>
         <servlet-class>com.dptradeking.branches.BranchesServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>HeadOfficeServlet</servlet-name>
+        <servlet-class>com.dptradeking.headoffice.HeadOfficeServlet</servlet-class>
+    </servlet>
 
     <!-- Servlet Mappings -->
     <servlet-mapping>
@@ -41,5 +45,9 @@
     <servlet-mapping>
         <servlet-name>BranchesServlet</servlet-name>
         <url-pattern>/api/branches</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>HeadOfficeServlet</servlet-name>
+        <url-pattern>/api/head-office</url-pattern>
     </servlet-mapping>
 </web-app>

@@ -28,10 +28,18 @@
         <servlet-name>SubBrokersServlet</servlet-name>
         <servlet-class>com.dptradeking.subbrokers.SubBrokersServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>BranchesServlet</servlet-name>
+        <servlet-class>com.dptradeking.branches.BranchesServlet</servlet-class>
+    </servlet>
 
     <!-- Servlet Mappings -->
     <servlet-mapping>
         <servlet-name>SubBrokersServlet</servlet-name>
         <url-pattern>/api/sub-brokers</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BranchesServlet</servlet-name>
+        <url-pattern>/api/branches</url-pattern>
     </servlet-mapping>
 </web-app>

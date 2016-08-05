@@ -24,6 +24,14 @@
     </filter-mapping>
 
     <!-- Servlets -->
+    <servlet>
+        <servlet-name>SubBrokersServlet</servlet-name>
+        <servlet-class>com.dptradeking.subbrokers.SubBrokersServlet</servlet-class>
+    </servlet>
 
     <!-- Servlet Mappings -->
+    <servlet-mapping>
+        <servlet-name>SubBrokersServlet</servlet-name>
+        <url-pattern>/api/sub-brokers</url-pattern>
+    </servlet-mapping>
 </web-app>

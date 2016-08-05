@@ -7,7 +7,9 @@ import com.google.gson.annotations.SerializedName;
 import org.bson.types.ObjectId;
 
 /**
- * Created by vbarad on 29/7/16.
+ * Creator: vbarad
+ * Date: 2016-08-05
+ * Project: DP-TradeKING
  */
 public class SubBroker {
   @SerializedName("_id")

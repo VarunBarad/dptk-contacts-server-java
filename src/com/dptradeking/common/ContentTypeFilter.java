@@ -5,7 +5,9 @@ import javax.servlet.annotation.WebFilter;
 import java.io.IOException;
 
 /**
- * Created by vbarad on 29/7/16.
+ * Creator: vbarad
+ * Date: 2016-08-05
+ * Project: DP-TradeKING
  */
 @WebFilter(filterName = "ContentTypeFilter")
 public class ContentTypeFilter implements Filter {

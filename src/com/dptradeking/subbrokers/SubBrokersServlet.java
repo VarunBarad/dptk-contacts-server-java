@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Creator: vbarad
@@ -47,6 +48,7 @@ public class SubBrokersServlet extends HttpServlet {
         subBrokers.add(subBroker);
       }
     });
+    Collections.sort(subBrokers, (s1, s2) -> s1.getName().compareTo(s2.getName()));
 
     JSONObject responseJson = new JSONObject();
     responseJson.put("status", 200);

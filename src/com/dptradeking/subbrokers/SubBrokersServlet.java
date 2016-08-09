@@ -28,6 +28,8 @@ import java.util.HashMap;
  */
 @WebServlet(name = "SubBrokersServlet")
 public class SubBrokersServlet extends HttpServlet {
+  private static final String PARAM_CATEGORIZE = "categorize";
+
   protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
   }
@@ -51,6 +53,27 @@ public class SubBrokersServlet extends HttpServlet {
     });
     Collections.sort(subBrokers, (s1, s2) -> s1.getName().compareTo(s2.getName()));
 
+    boolean categorize = false;
+    if (Boolean.parseBoolean(request.getParameter(PARAM_CATEGORIZE))) {
+      categorize = true;
+    }
+
+    JSONObject responseJson = new JSONObject();
+    responseJson.put("status", 200);
+    if (categorize) {
+      JSONObject categorizedSubBrokers = this.categorizeSubBrokers(subBrokers);
+      responseJson.put("message", categorizedSubBrokers);
+    } else {
+      responseJson.put("message", new JSONArray((new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create()).toJson(subBrokers)));
+    }
+
+    PrintWriter responseWriter = response.getWriter();
+
+    responseWriter.print(responseJson.toString());
+    responseWriter.close();
+  }
+
+  private JSONObject categorizeSubBrokers(final ArrayList<SubBroker> subBrokers) {
     HashMap<Character, ArrayList<SubBroker>> mapSubBrokers = new HashMap<>();
     for (SubBroker s : subBrokers) {
       char key = Character.toUpperCase(s.getName().charAt(0));
@@ -65,13 +88,6 @@ public class SubBrokersServlet extends HttpServlet {
       categorizedSubBrokers.put(Character.toString(key), new JSONArray((new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create()).toJson(mapSubBrokers.get(key))));
     }
 
-    JSONObject responseJson = new JSONObject();
-    responseJson.put("status", 200);
-    responseJson.put("message", categorizedSubBrokers);
-
-    PrintWriter responseWriter = response.getWriter();
-
-    responseWriter.print(responseJson.toString());
-    responseWriter.close();
+    return categorizedSubBrokers;
   }
 }

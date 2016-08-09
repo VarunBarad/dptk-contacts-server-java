@@ -32,17 +32,21 @@ public class SubBroker {
   @Expose
   @SerializedName("registrationNumber")
   private String registrationNumber;
+  @Expose
+  @SerializedName("incorporationDate")
+  private String incorporationDate;
 
   public SubBroker() {
   }
 
-  public SubBroker(String id, String name, String address, String contactNumber, String email, String registrationNumber) {
+  public SubBroker(String id, String name, String address, String contactNumber, String email, String registrationNumber, String incorporationDate) {
     this.id = id;
     this.name = name;
     this.address = address;
     this.contactNumber = contactNumber;
     this.email = email;
     this.registrationNumber = registrationNumber;
+    this.incorporationDate = incorporationDate;
   }
 
   public static SubBroker SubBrokerFactory(String jsonSubBroker) {
@@ -112,5 +116,13 @@ public class SubBroker {
 
   public void populateId() {
     this.id = this._id.toHexString();
+  }
+
+  public String getIncorporationDate() {
+    return incorporationDate;
+  }
+
+  public void setIncorporationDate(String incorporationDate) {
+    this.incorporationDate = incorporationDate;
   }
 }

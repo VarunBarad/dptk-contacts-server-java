@@ -6,6 +6,11 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import org.bson.types.ObjectId;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Creator: vbarad
  * Date: 2016-08-05
@@ -16,7 +21,7 @@ public class SubBroker {
   private ObjectId _id;
   @Expose
   @SerializedName("id")
-  private String id = "";
+  private String id;
   @Expose
   @SerializedName("name")
   private String name;
@@ -59,6 +64,92 @@ public class SubBroker {
       e.printStackTrace();
     }
     return subBroker;
+  }
+
+  public static boolean validateName(String name) {
+    boolean isValid;
+
+    if (name == null || name.isEmpty()) {
+      isValid = false;
+    } else {
+      isValid = true;
+    }
+
+    return isValid;
+  }
+
+  public static boolean validateAddress(String address) {
+    boolean isValid;
+
+    if (address == null || address.isEmpty()) {
+      isValid = false;
+    } else {
+      isValid = true;
+    }
+
+    return isValid;
+  }
+
+  public static boolean validateContactNumber(String contactNumber) {
+    boolean isValid;
+
+    if (contactNumber == null || contactNumber.isEmpty() || !contactNumber.matches("^(\\+91)?[1-9][0-9]{9}$")) {
+      isValid = false;
+    } else {
+      isValid = true;
+    }
+
+    return isValid;
+  }
+
+  public static boolean validateEmail(String email) {
+    boolean isValid;
+
+    //ToDo: Check email regex
+    if (email == null || email.isEmpty()) {
+      isValid = false;
+    } else {
+      isValid = true;
+    }
+
+    return isValid;
+  }
+
+  public static boolean validateRegistrationNumber(String registrationNumber) {
+    boolean isValid;
+
+    //ToDo: Check registration number regex
+    if (registrationNumber == null || registrationNumber.isEmpty()) {
+      isValid = false;
+    } else {
+      isValid = true;
+    }
+
+    return isValid;
+  }
+
+  public static boolean validateIncorporationDate(String incorporationDate) {
+    boolean isValid;
+
+    if (incorporationDate == null || incorporationDate.isEmpty()) {
+      isValid = false;
+    } else {
+      try {
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = formatter.parse(incorporationDate);
+        Date currentDate = new Date();
+        if (currentDate.before(date)) {
+          isValid = false;
+        } else {
+          isValid = true;
+        }
+      } catch (ParseException e) {
+        e.printStackTrace();
+        isValid = false;
+      }
+    }
+
+    return isValid;
   }
 
   public String getId() {

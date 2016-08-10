@@ -31,8 +31,8 @@ public class BranchesServlet extends HttpServlet {
   }
 
   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    MongoClient mongoClient = new MongoClient("localhost");
-    MongoDatabase mongoDatabase = mongoClient.getDatabase("dptradeking");
+    MongoClient mongoClient = new MongoClient(this.getServletContext().getInitParameter("database-host"));
+    MongoDatabase mongoDatabase = mongoClient.getDatabase(this.getServletContext().getInitParameter("database-name"));
 
     FindIterable<Document> iterable = mongoDatabase.getCollection("branches").find();
 

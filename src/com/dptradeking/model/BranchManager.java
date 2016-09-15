@@ -1,5 +1,7 @@
 package com.dptradeking.model;
 
+import com.dptradeking.util.gsonadapter.ObjectIdAdapter;
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -11,11 +13,9 @@ import org.bson.types.ObjectId;
  * Project: DP-TradeKING
  */
 public class BranchManager {
+  @Expose
   @SerializedName("_id")
   private ObjectId _id;
-  @Expose
-  @SerializedName("id")
-  private String id;
   @Expose
   @SerializedName("name")
   private String name;
@@ -30,18 +30,18 @@ public class BranchManager {
   }
 
   public BranchManager(String id, String name, String contactNumber, String email) {
-    this.id = id;
+    this._id = new ObjectId(id);
     this.name = name;
     this.contactNumber = contactNumber;
     this.email = email;
   }
 
   public String getId() {
-    return id;
+    return _id.toHexString();
   }
 
   public void setId(String id) {
-    this.id = id;
+    this._id = new ObjectId(id);
   }
 
   public String getName() {
@@ -70,10 +70,11 @@ public class BranchManager {
 
   @Override
   public String toString() {
-    return ((new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create()).toJson(this));
-  }
-
-  public void populateId() {
-    this.id = this._id.toHexString();
+    Gson gson =
+        new GsonBuilder()
+            .registerTypeAdapter(ObjectId.class, new ObjectIdAdapter())
+            .create();
+  
+    return gson.toJson(this);
   }
 }

@@ -1,12 +1,11 @@
 package com.dptradeking.headoffice;
 
 import com.dptradeking.model.Department;
+import com.dptradeking.util.DatabaseHelper;
+import com.dptradeking.util.gsonadapter.ObjectIdAdapter;
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.mongodb.Block;
-import com.mongodb.MongoClient;
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoDatabase;
-import org.bson.Document;
+import org.bson.types.ObjectId;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -31,26 +30,21 @@ public class HeadOfficeServlet extends HttpServlet {
   }
 
   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    MongoClient mongoClient = new MongoClient("localhost");
-    MongoDatabase mongoDatabase = mongoClient.getDatabase("dptradeking");
-
-    FindIterable<Document> iterable = mongoDatabase.getCollection("headOffice").find();
-
-    final ArrayList<Department> departments = new ArrayList<>();
-
-    iterable.forEach(new Block<Document>() {
-
-      @Override
-      public void apply(Document document) {
-        Department department = Department.DepartmentFactory(document.toJson());
-        department.populateId();
-        departments.add(department);
-      }
-    });
-
+    DatabaseHelper databaseHelper = new DatabaseHelper(
+        this.getServletContext().getInitParameter("database-host"),
+        this.getServletContext().getInitParameter("database-name")
+    );
+  
+    final ArrayList<Department> departments = databaseHelper.getDepartments();
+  
+    Gson gson =
+        new GsonBuilder()
+            .registerTypeAdapter(ObjectId.class, new ObjectIdAdapter())
+            .create();
+    
     JSONObject responseJson = new JSONObject();
     responseJson.put("status", 200);
-    responseJson.put("message", new JSONArray((new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create()).toJson(departments)));
+    responseJson.put("message", new JSONArray(gson.toJson(departments)));
 
     PrintWriter responseWriter = response.getWriter();
 

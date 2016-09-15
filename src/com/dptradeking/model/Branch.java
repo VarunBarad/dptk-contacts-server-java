@@ -1,9 +1,11 @@
 package com.dptradeking.model;
 
+import com.dptradeking.util.gsonadapter.ObjectIdAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import org.bson.Document;
 import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
@@ -14,11 +16,9 @@ import java.util.ArrayList;
  * Project: DP-TradeKING
  */
 public class Branch {
+  @Expose
   @SerializedName("_id")
   private ObjectId _id;
-  @Expose
-  @SerializedName("id")
-  private String id;
   @Expose
   @SerializedName("name")
   private String name;
@@ -43,15 +43,15 @@ public class Branch {
   }
 
   public Branch(String id, String name, String alias, String address, String contactNumber, BranchManager branchManager) {
-    this.id = id;
+    this._id = new ObjectId(id);
     this.name = name;
     this.alias = alias;
     this.address = address;
     this.contactNumber = contactNumber;
     this.branchManager = branchManager;
   }
-
-  public static Branch BranchFactory(String jsonBranch) {
+  
+  public static Branch getInstance(String jsonBranch) {
     Gson gson = new Gson();
     Branch branch;
     try {
@@ -62,13 +62,18 @@ public class Branch {
     }
     return branch;
   }
+  
+  public static Branch getInstance(Document document) {
+    Branch branch = Branch.getInstance(document.toJson());
+    return branch;
+  }
 
   public String getId() {
-    return id;
+    return _id.toHexString();
   }
 
   public void setId(String id) {
-    this.id = id;
+    this._id = new ObjectId(id);
   }
 
   public String getName() {
@@ -120,15 +125,12 @@ public class Branch {
 
   @Override
   public String toString() {
-    return ((new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create()).toJson(this));
-  }
-
-  public void populateId() {
-    this.id = this._id.toHexString();
-    this.branchManager.populateId();
-    for (int i = 0; i < this.getExecutives().size(); i++) {
-      this.getExecutives().get(i).populateId();
-    }
+    Gson gson =
+        new GsonBuilder()
+            .registerTypeAdapter(ObjectId.class, new ObjectIdAdapter())
+            .create();
+  
+    return gson.toJson(this);
   }
 
   public String getAlias() {

@@ -15,7 +15,7 @@ public class ContentTypeFilter implements Filter {
   }
 
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException {
-    response.setContentType("application/json");
+    response.setContentType("application/json;charset=UTF-8");
     chain.doFilter(request, response);
   }
 

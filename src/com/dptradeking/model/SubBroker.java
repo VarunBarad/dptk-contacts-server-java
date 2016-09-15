@@ -1,15 +1,20 @@
 package com.dptradeking.model;
 
+import com.dptradeking.util.gsonadapter.ObjectIdAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import org.bson.Document;
 import org.bson.types.ObjectId;
+import org.json.JSONObject;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 
 /**
  * Creator: vbarad
@@ -17,11 +22,9 @@ import java.util.Date;
  * Project: DP-TradeKING
  */
 public class SubBroker {
-  @SerializedName("_id")
-  private ObjectId _id;
   @Expose
-  @SerializedName("id")
-  private String id;
+  @SerializedName("_id")
+  private ObjectId id;
   @Expose
   @SerializedName("name")
   private String name;
@@ -45,7 +48,7 @@ public class SubBroker {
   }
 
   public SubBroker(String id, String name, String address, String contactNumber, String email, String registrationNumber, String incorporationDate) {
-    this.id = id;
+    this.id = new ObjectId(id);
     this.name = name;
     this.address = address;
     this.contactNumber = contactNumber;
@@ -53,16 +56,38 @@ public class SubBroker {
     this.registrationNumber = registrationNumber;
     this.incorporationDate = incorporationDate;
   }
-
-  public static SubBroker SubBrokerFactory(String jsonSubBroker) {
-    Gson gson = new Gson();
+  
+  public static SubBroker getInstance(String jsonSubBroker) {
+    Gson gson =
+        new GsonBuilder()
+            .registerTypeAdapter(ObjectId.class, new ObjectIdAdapter())
+            .create();
     SubBroker subBroker;
     try {
       subBroker = gson.fromJson(jsonSubBroker, SubBroker.class);
-    } catch (Exception e) {
+    } catch (JsonSyntaxException e) {
       subBroker = null;
       e.printStackTrace();
     }
+    return subBroker;
+  }
+  
+  public static SubBroker getInstance(Document document) {
+    JSONObject documentJson = new JSONObject(document.toJson());
+    
+    Gson gson =
+        new GsonBuilder()
+            .registerTypeAdapter(ObjectId.class, new ObjectIdAdapter())
+            .create();
+    SubBroker subBroker;
+    
+    try {
+      subBroker = gson.fromJson(documentJson.toString(), SubBroker.class);
+    } catch (JsonSyntaxException e) {
+      subBroker = null;
+      e.printStackTrace();
+    }
+    
     return subBroker;
   }
 
@@ -153,11 +178,11 @@ public class SubBroker {
   }
 
   public String getId() {
-    return id;
+    return id.toHexString();
   }
 
   public void setId(String id) {
-    this.id = id;
+    this.id = new ObjectId(id);
   }
 
   public String getName() {
@@ -199,21 +224,44 @@ public class SubBroker {
   public void setRegistrationNumber(String registrationNumber) {
     this.registrationNumber = registrationNumber;
   }
-
-  @Override
-  public String toString() {
-    return ((new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create()).toJson(this));
-  }
-
-  public void populateId() {
-    this.id = this._id.toHexString();
-  }
-
+  
   public String getIncorporationDate() {
     return incorporationDate;
   }
-
+  
   public void setIncorporationDate(String incorporationDate) {
     this.incorporationDate = incorporationDate;
+  }
+  
+  @Override
+  public String toString() {
+    Gson gson =
+        new GsonBuilder()
+            .registerTypeAdapter(ObjectId.class, new ObjectIdAdapter())
+            .create();
+    
+    return gson.toJson(this);
+  }
+  
+  public Document toDocument() {
+    Document document = new Document();
+    
+    HashMap<String, Object> subBrokerMap = new HashMap<>();
+    JSONObject subBrokerJson = new JSONObject(this.toString());
+    subBrokerJson
+        .keySet()
+        .forEach(key -> subBrokerMap.put(key, subBrokerJson.get(key)));
+    
+    ObjectId subBrokerId;
+    if (subBrokerMap.containsKey("_id") && subBrokerMap.get("_id") != null && !((String) subBrokerMap.get("_id")).isEmpty()) {
+      subBrokerId = new ObjectId((String) subBrokerMap.remove("_id"));
+    } else {
+      subBrokerId = new ObjectId();
+    }
+    
+    subBrokerMap.put("_id", subBrokerId);
+    document.putAll(subBrokerMap);
+    
+    return document;
   }
 }

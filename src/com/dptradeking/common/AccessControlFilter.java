@@ -19,7 +19,6 @@ public class AccessControlFilter implements Filter {
     ((HttpServletResponse) response).setHeader("Access-Control-Allow-Origin", "*");
     ((HttpServletResponse) response).setHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT, HEAD, OPTIONS, PATCH");
     ((HttpServletResponse) response).setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-    System.out.println("AccessControl: " + request.toString());
     chain.doFilter(request, response);
   }
 

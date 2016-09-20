@@ -26,20 +26,16 @@ public class Department {
   @SerializedName("alias")
   private String alias;
   @Expose
-  @SerializedName("headOfDepartment")
-  private HeadOfDepartment headOfDepartment;
-  @Expose
   @SerializedName("executives")
   private ArrayList<Executive> executives;
 
   public Department() {
   }
-
-  public Department(String id, String name, String alias, HeadOfDepartment headOfDepartment, ArrayList<Executive> executives) {
+  
+  public Department(String id, String name, String alias, ArrayList<Executive> executives) {
     this._id = new ObjectId(id);
     this.name = name;
     this.alias = alias;
-    this.headOfDepartment = headOfDepartment;
     this.executives = executives;
   }
   
@@ -82,14 +78,6 @@ public class Department {
 
   public void setAlias(String alias) {
     this.alias = alias;
-  }
-
-  public HeadOfDepartment getHeadOfDepartment() {
-    return headOfDepartment;
-  }
-
-  public void setHeadOfDepartment(HeadOfDepartment headOfDepartment) {
-    this.headOfDepartment = headOfDepartment;
   }
 
   public ArrayList<Executive> getExecutives() {

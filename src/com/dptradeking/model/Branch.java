@@ -32,23 +32,19 @@ public class Branch {
   @SerializedName("contactNumber")
   private String contactNumber;
   @Expose
-  @SerializedName("branchManager")
-  private BranchManager branchManager;
-  @Expose
   @SerializedName("executives")
   private ArrayList<Executive> executives;
 
   public Branch() {
     this.executives = new ArrayList<>();
   }
-
-  public Branch(String id, String name, String alias, String address, String contactNumber, BranchManager branchManager) {
+  
+  public Branch(String id, String name, String alias, String address, String contactNumber) {
     this._id = new ObjectId(id);
     this.name = name;
     this.alias = alias;
     this.address = address;
     this.contactNumber = contactNumber;
-    this.branchManager = branchManager;
   }
   
   public static Branch getInstance(String jsonBranch) {
@@ -98,14 +94,6 @@ public class Branch {
 
   public void setContactNumber(String contactNumber) {
     this.contactNumber = contactNumber;
-  }
-
-  public BranchManager getBranchManager() {
-    return branchManager;
-  }
-
-  public void setBranchManager(BranchManager branchManager) {
-    this.branchManager = branchManager;
   }
 
   public ArrayList<Executive> getExecutives() {

@@ -1,5 +1,6 @@
 package com.dptradeking.refresh;
 
+import com.dptradeking.config.Config;
 import com.dptradeking.model.Branch;
 import com.dptradeking.model.Department;
 import com.dptradeking.model.SubBroker;
@@ -28,10 +29,10 @@ public class RefreshServlet extends HttpServlet {
   @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     DatabaseHelper databaseHelper = new DatabaseHelper(
-        this.getServletContext().getInitParameter("database-host"),
-        this.getServletContext().getInitParameter("database-name")
+        Config.Database.DB_HOST,
+        Config.Database.DB_NAME
     );
-    MainWorkbookHelper workbookHelper = MainWorkbookHelper.getInstance(new File("/home/vbarad/Documents/Workspace/Projects/DP Trade King/excel-files/main.xlsx"));
+    MainWorkbookHelper workbookHelper = MainWorkbookHelper.getInstance(new File(Config.Workbook.FILE_MAIN));
     
     if (workbookHelper != null) {
       databaseHelper.clearDatabase();
@@ -40,12 +41,12 @@ public class RefreshServlet extends HttpServlet {
       databaseHelper.insertMultipleSubBrokers(subBrokers);
       
       ArrayList<Department> departments = workbookHelper.getDepartments();
-      DepartmentsWorkbookHelper departmentsWorkbookHelper = DepartmentsWorkbookHelper.getInstance(new File("/home/vbarad/Documents/Workspace/Projects/DP Trade King/excel-files/headOffice.xlsx"), departments);
+      DepartmentsWorkbookHelper departmentsWorkbookHelper = DepartmentsWorkbookHelper.getInstance(new File(Config.Workbook.FILE_HEAD_OFFICE), departments);
       departments = new ArrayList<>(departmentsWorkbookHelper.getFilledDepartments());
       databaseHelper.insertMultipleDepartments(departments);
       
       ArrayList<Branch> branches = workbookHelper.getBranches();
-      BranchesWorkbookHelper branchesWorkbookHelper = BranchesWorkbookHelper.getInstance(new File("/home/vbarad/Documents/Workspace/Projects/DP Trade King/excel-files/branches.xlsx"), branches);
+      BranchesWorkbookHelper branchesWorkbookHelper = BranchesWorkbookHelper.getInstance(new File(Config.Workbook.FILE_BRANCHES), branches);
       branches = new ArrayList<>(branchesWorkbookHelper.getFilledBranches());
       databaseHelper.insertMultipleBranches(branches);
       

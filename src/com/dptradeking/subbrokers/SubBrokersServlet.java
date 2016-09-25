@@ -1,5 +1,6 @@
 package com.dptradeking.subbrokers;
 
+import com.dptradeking.config.Config;
 import com.dptradeking.model.SubBroker;
 import com.dptradeking.util.DatabaseHelper;
 import com.dptradeking.util.gsonadapter.ObjectIdAdapter;
@@ -30,8 +31,8 @@ public class SubBrokersServlet extends HttpServlet {
   
   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     DatabaseHelper databaseHelper = new DatabaseHelper(
-        this.getServletContext().getInitParameter("database-host"),
-        this.getServletContext().getInitParameter("database-name")
+        Config.Database.DB_HOST,
+        Config.Database.DB_NAME
     );
     
     final ArrayList<SubBroker> subBrokers = databaseHelper.getSubBrokers();

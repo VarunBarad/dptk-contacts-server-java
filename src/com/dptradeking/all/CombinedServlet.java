@@ -1,5 +1,6 @@
 package com.dptradeking.all;
 
+import com.dptradeking.config.Config;
 import com.dptradeking.model.Branch;
 import com.dptradeking.model.Department;
 import com.dptradeking.model.SubBroker;
@@ -29,8 +30,8 @@ import java.util.ArrayList;
 public class CombinedServlet extends HttpServlet {
   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     DatabaseHelper databaseHelper = new DatabaseHelper(
-        this.getServletContext().getInitParameter("database-host"),
-        this.getServletContext().getInitParameter("database-name")
+        Config.Database.DB_HOST,
+        Config.Database.DB_NAME
     );
   
     final ArrayList<Department> headOffice = databaseHelper.getDepartments();

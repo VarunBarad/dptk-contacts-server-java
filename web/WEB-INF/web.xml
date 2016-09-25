@@ -50,6 +50,10 @@
         <servlet-name>CombinedServlet</servlet-name>
         <servlet-class>com.dptradeking.all.CombinedServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>RefreshServlet</servlet-name>
+        <servlet-class>com.dptradeking.refresh.RefreshServlet</servlet-class>
+    </servlet>
 
     <!-- Servlet Mappings -->
     <servlet-mapping>
@@ -67,5 +71,9 @@
     <servlet-mapping>
         <servlet-name>CombinedServlet</servlet-name>
         <url-pattern>/api/all</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RefreshServlet</servlet-name>
+        <url-pattern>/api/refresh</url-pattern>
     </servlet-mapping>
 </web-app>

@@ -5,7 +5,11 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import org.bson.Document;
 import org.bson.types.ObjectId;
+import org.json.JSONObject;
+
+import java.util.HashMap;
 
 /**
  * Creator: vbarad
@@ -30,6 +34,14 @@ public class Executive {
   private String email;
 
   public Executive() {
+  }
+  
+  public Executive(String name, String designation, String contactNumber, String email) {
+    this._id = new ObjectId();
+    this.name = name;
+    this.designation = designation;
+    this.contactNumber = contactNumber;
+    this.email = email;
   }
 
   public Executive(String id, String name, String designation, String contactNumber, String email) {
@@ -88,5 +100,32 @@ public class Executive {
             .create();
   
     return gson.toJson(this);
+  }
+  
+  public boolean validateDetails() {
+    //ToDo: Implement proper validation
+    return true;
+  }
+  
+  public Document toDocument() {
+    Document document = new Document();
+    
+    HashMap<String, Object> executiveMap = new HashMap<>();
+    JSONObject executiveJson = new JSONObject(this.toString());
+    executiveJson
+        .keySet()
+        .forEach(key -> executiveMap.put(key, executiveJson.get(key)));
+    
+    ObjectId executiveId;
+    if (executiveMap.containsKey("_id") && executiveMap.get("_id") != null && !((String) executiveMap.get("_id")).isEmpty()) {
+      executiveId = new ObjectId((String) executiveMap.remove("_id"));
+    } else {
+      executiveId = new ObjectId();
+    }
+    
+    executiveMap.put("_id", executiveId);
+    document.putAll(executiveMap);
+    
+    return document;
   }
 }

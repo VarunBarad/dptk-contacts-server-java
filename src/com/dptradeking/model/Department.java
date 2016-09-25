@@ -7,8 +7,11 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import org.bson.Document;
 import org.bson.types.ObjectId;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.stream.Collectors;
 
 /**
  * Creator: vbarad
@@ -32,11 +35,22 @@ public class Department {
   public Department() {
   }
   
+  public Department(String name, String alias) {
+    this._id = new ObjectId();
+    this.name = name;
+    this.alias = alias;
+    this.executives = new ArrayList<>();
+  }
+  
   public Department(String id, String name, String alias, ArrayList<Executive> executives) {
     this._id = new ObjectId(id);
     this.name = name;
     this.alias = alias;
-    this.executives = executives;
+    if (executives != null) {
+      this.executives = executives;
+    } else {
+      this.executives = new ArrayList<>();
+    }
   }
   
   public static Department getInstance(String jsonDepartment) {
@@ -103,5 +117,37 @@ public class Department {
             .create();
   
     return gson.toJson(this);
+  }
+  
+  public boolean validateDetails() {
+    //ToDo: Add proper validation
+    return true;
+  }
+  
+  public Document toDocument() {
+    Document document = new Document();
+    
+    HashMap<String, Object> departmentMap = new HashMap<>();
+    JSONObject departmentJson = new JSONObject(this.toString());
+    departmentJson
+        .keySet()
+        .forEach(key -> departmentMap.put(key, departmentJson.get(key)));
+    departmentMap.put("executives",
+        this.executives
+            .stream()
+            .map(Executive::toDocument)
+            .collect(Collectors.toList()));
+    
+    ObjectId departmentId;
+    if (departmentMap.containsKey("_id") && departmentMap.get("_id") != null && !((String) departmentMap.get("_id")).isEmpty()) {
+      departmentId = new ObjectId((String) departmentMap.remove("_id"));
+    } else {
+      departmentId = new ObjectId();
+    }
+    
+    departmentMap.put("_id", departmentId);
+    document.putAll(departmentMap);
+    
+    return document;
   }
 }

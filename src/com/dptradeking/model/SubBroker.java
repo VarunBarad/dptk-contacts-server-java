@@ -43,10 +43,20 @@ public class SubBroker {
   @Expose
   @SerializedName("incorporationDate")
   private String incorporationDate;
-
+  
   public SubBroker() {
   }
-
+  
+  public SubBroker(String name, String address, String contactNumber, String email, String registrationNumber, String incorporationDate) {
+    this.id = new ObjectId();
+    this.name = name;
+    this.address = address;
+    this.contactNumber = contactNumber;
+    this.email = email;
+    this.registrationNumber = registrationNumber;
+    this.incorporationDate = incorporationDate;
+  }
+  
   public SubBroker(String id, String name, String address, String contactNumber, String email, String registrationNumber, String incorporationDate) {
     this.id = new ObjectId(id);
     this.name = name;
@@ -90,72 +100,52 @@ public class SubBroker {
     
     return subBroker;
   }
-
+  
   public static boolean validateName(String name) {
     boolean isValid;
-
-    if (name == null || name.isEmpty()) {
-      isValid = false;
-    } else {
-      isValid = true;
-    }
-
+    
+    isValid = !(name == null || name.isEmpty());
+    
     return isValid;
   }
-
+  
   public static boolean validateAddress(String address) {
     boolean isValid;
-
-    if (address == null || address.isEmpty()) {
-      isValid = false;
-    } else {
-      isValid = true;
-    }
-
+    
+    isValid = !(address == null || address.isEmpty());
+    
     return isValid;
   }
-
+  
   public static boolean validateContactNumber(String contactNumber) {
     boolean isValid;
-
-    if (contactNumber == null || contactNumber.isEmpty() || !contactNumber.matches("^(\\+91)?[1-9][0-9]{9}$")) {
-      isValid = false;
-    } else {
-      isValid = true;
-    }
-
+    
+    isValid = !(contactNumber == null || contactNumber.isEmpty() || !contactNumber.matches("^(\\+91)?[1-9][0-9]{9}$"));
+    
     return isValid;
   }
-
+  
   public static boolean validateEmail(String email) {
     boolean isValid;
-
+    
     //ToDo: Check email regex
-    if (email == null || email.isEmpty()) {
-      isValid = false;
-    } else {
-      isValid = true;
-    }
-
+    isValid = !(email == null || email.isEmpty());
+    
     return isValid;
   }
-
+  
   public static boolean validateRegistrationNumber(String registrationNumber) {
     boolean isValid;
-
+    
     //ToDo: Check registration number regex
-    if (registrationNumber == null || registrationNumber.isEmpty()) {
-      isValid = false;
-    } else {
-      isValid = true;
-    }
-
+    isValid = !(registrationNumber == null || registrationNumber.isEmpty());
+    
     return isValid;
   }
-
+  
   public static boolean validateIncorporationDate(String incorporationDate) {
     boolean isValid;
-
+    
     if (incorporationDate == null || incorporationDate.isEmpty()) {
       isValid = false;
     } else {
@@ -163,64 +153,60 @@ public class SubBroker {
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         Date date = formatter.parse(incorporationDate);
         Date currentDate = new Date();
-        if (currentDate.before(date)) {
-          isValid = false;
-        } else {
-          isValid = true;
-        }
+        isValid = !currentDate.before(date);
       } catch (ParseException e) {
         e.printStackTrace();
         isValid = false;
       }
     }
-
+    
     return isValid;
   }
-
+  
   public String getId() {
     return id.toHexString();
   }
-
+  
   public void setId(String id) {
     this.id = new ObjectId(id);
   }
-
+  
   public String getName() {
     return name;
   }
-
+  
   public void setName(String name) {
     this.name = name;
   }
-
+  
   public String getAddress() {
     return address;
   }
-
+  
   public void setAddress(String address) {
     this.address = address;
   }
-
+  
   public String getContactNumber() {
     return contactNumber;
   }
-
+  
   public void setContactNumber(String contactNumber) {
     this.contactNumber = contactNumber;
   }
-
+  
   public String getEmail() {
     return email;
   }
-
+  
   public void setEmail(String email) {
     this.email = email;
   }
-
+  
   public String getRegistrationNumber() {
     return registrationNumber;
   }
-
+  
   public void setRegistrationNumber(String registrationNumber) {
     this.registrationNumber = registrationNumber;
   }
@@ -263,5 +249,14 @@ public class SubBroker {
     document.putAll(subBrokerMap);
     
     return document;
+  }
+  
+  public boolean validateDetails() {
+    return SubBroker.validateName(this.name) &&
+        SubBroker.validateAddress(this.address) &&
+        SubBroker.validateContactNumber(this.contactNumber) &&
+        SubBroker.validateEmail(this.email) &&
+        SubBroker.validateRegistrationNumber(this.registrationNumber) &&
+        SubBroker.validateIncorporationDate(this.incorporationDate);
   }
 }

@@ -25,10 +25,6 @@ import java.util.ArrayList;
  */
 @WebServlet(name = "BranchesServlet")
 public class BranchesServlet extends HttpServlet {
-  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-  }
-
   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     DatabaseHelper databaseHelper = new DatabaseHelper(
         this.getServletContext().getInitParameter("database-host"),

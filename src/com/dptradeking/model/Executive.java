@@ -32,9 +32,6 @@ public class Executive {
   @Expose
   @SerializedName("email")
   private String email;
-
-  public Executive() {
-  }
   
   public Executive(String name, String designation, String contactNumber, String email) {
     this._id = new ObjectId();
@@ -43,13 +40,37 @@ public class Executive {
     this.contactNumber = contactNumber;
     this.email = email;
   }
-
-  public Executive(String id, String name, String designation, String contactNumber, String email) {
-    this._id = new ObjectId(id);
-    this.name = name;
-    this.designation = designation;
-    this.contactNumber = contactNumber;
-    this.email = email;
+  
+  public static boolean validateName(String name) {
+    boolean isValid;
+    
+    isValid = !(name == null || name.isEmpty());
+    
+    return isValid;
+  }
+  
+  public static boolean validateDesignation(String designation) {
+    boolean isValid;
+    
+    isValid = !(designation == null || designation.isEmpty());
+    
+    return isValid;
+  }
+  
+  public static boolean validateContactNumber(String contactNumber) {
+    boolean isValid;
+    
+    isValid = !(contactNumber == null || contactNumber.isEmpty() || !contactNumber.matches("^(\\+91)?[1-9][0-9]{9}$"));
+    
+    return isValid;
+  }
+  
+  public static boolean validateEmail(String email) {
+    boolean isValid;
+    
+    isValid = !(email == null || email.isEmpty()) && email.matches("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
+    
+    return isValid;
   }
 
   public String getId() {
@@ -75,19 +96,19 @@ public class Executive {
   public void setDesignation(String designation) {
     this.designation = designation;
   }
-
+  
   public String getContactNumber() {
     return contactNumber;
   }
-
+  
   public void setContactNumber(String contactNumber) {
     this.contactNumber = contactNumber;
   }
-
+  
   public String getEmail() {
     return email;
   }
-
+  
   public void setEmail(String email) {
     this.email = email;
   }
@@ -103,8 +124,10 @@ public class Executive {
   }
   
   public boolean validateDetails() {
-    //ToDo: Implement proper validation
-    return true;
+    return Executive.validateName(this.name) &&
+        Executive.validateDesignation(this.designation) &&
+        Executive.validateContactNumber(this.contactNumber) &&
+        Executive.validateEmail(this.email);
   }
   
   public Document toDocument() {

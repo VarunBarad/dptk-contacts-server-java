@@ -77,6 +77,38 @@ public class Branch {
     return branch;
   }
   
+  public static boolean validateName(String name) {
+    boolean isValid;
+    
+    isValid = !(name == null || name.isEmpty());
+    
+    return isValid;
+  }
+  
+  public static boolean validateAlias(String alias) {
+    boolean isValid;
+    
+    isValid = !(alias == null || alias.isEmpty());
+    
+    return isValid;
+  }
+  
+  public static boolean validateAddress(String address) {
+    boolean isValid;
+    
+    isValid = !(address == null || address.isEmpty());
+    
+    return isValid;
+  }
+  
+  public static boolean validateContactNumber(String contactNumber) {
+    boolean isValid;
+    
+    isValid = !(contactNumber == null || contactNumber.isEmpty() || !contactNumber.matches("^(\\+91)?[1-9][0-9]{9}$"));
+    
+    return isValid;
+  }
+  
   public String getId() {
     return _id.toHexString();
   }
@@ -143,8 +175,16 @@ public class Branch {
   }
   
   public boolean validateDetails() {
-    //ToDo: Validate every detail
-    return true;
+    boolean isExecutivesValid =
+        this.executives
+            .stream()
+            .reduce(true, (isValid, executive) -> isValid && executive.validateDetails(), (b1, b2) -> b1 && b2);
+  
+    return isExecutivesValid &&
+        Branch.validateName(this.name) &&
+        Branch.validateAlias(this.alias) &&
+        Branch.validateAddress(this.address) &&
+        Branch.validateContactNumber(this.contactNumber);
   }
   
   public Document toDocument() {

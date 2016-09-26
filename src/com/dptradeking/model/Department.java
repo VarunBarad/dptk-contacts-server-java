@@ -69,6 +69,22 @@ public class Department {
     Department department = Department.getInstance(document.toJson());
     return department;
   }
+  
+  public static boolean validateName(String name) {
+    boolean isValid;
+    
+    isValid = !(name == null || name.isEmpty());
+    
+    return isValid;
+  }
+  
+  public static boolean validateAlias(String alias) {
+    boolean isValid;
+    
+    isValid = !(alias == null || alias.isEmpty());
+    
+    return isValid;
+  }
 
   public String getId() {
     return _id.toHexString();
@@ -120,8 +136,14 @@ public class Department {
   }
   
   public boolean validateDetails() {
-    //ToDo: Add proper validation
-    return true;
+    boolean isExecutivesValid =
+        this.executives
+            .stream()
+            .reduce(true, (isValid, executive) -> isValid && executive.validateDetails(), (b1, b2) -> b1 && b2);
+  
+    return isExecutivesValid &&
+        Department.validateName(this.name) &&
+        Department.validateAlias(this.alias);
   }
   
   public Document toDocument() {

@@ -32,22 +32,25 @@ public class RefreshServlet extends HttpServlet {
         Config.Database.DB_HOST,
         Config.Database.DB_NAME
     );
-    MainWorkbookHelper workbookHelper = MainWorkbookHelper.getInstance(new File(Config.Workbook.FILE_MAIN));
-    
-    if (workbookHelper != null) {
+    MainWorkbookHelper mainWorkbookHelper = MainWorkbookHelper.getInstance(new File(Config.Workbook.FILE_MAIN));
+  
+    if (mainWorkbookHelper != null) {
       databaseHelper.clearDatabase();
-      
-      ArrayList<SubBroker> subBrokers = workbookHelper.getSubBrokers();
+    
+      ArrayList<SubBroker> subBrokers = mainWorkbookHelper.getSubBrokers();
+      mainWorkbookHelper.close();
       databaseHelper.insertMultipleSubBrokers(subBrokers);
-      
-      ArrayList<Department> departments = workbookHelper.getDepartments();
+    
+      ArrayList<Department> departments = mainWorkbookHelper.getDepartments();
       DepartmentsWorkbookHelper departmentsWorkbookHelper = DepartmentsWorkbookHelper.getInstance(new File(Config.Workbook.FILE_HEAD_OFFICE), departments);
       departments = new ArrayList<>(departmentsWorkbookHelper.getFilledDepartments());
+      departmentsWorkbookHelper.close();
       databaseHelper.insertMultipleDepartments(departments);
-      
-      ArrayList<Branch> branches = workbookHelper.getBranches();
+    
+      ArrayList<Branch> branches = mainWorkbookHelper.getBranches();
       BranchesWorkbookHelper branchesWorkbookHelper = BranchesWorkbookHelper.getInstance(new File(Config.Workbook.FILE_BRANCHES), branches);
       branches = new ArrayList<>(branchesWorkbookHelper.getFilledBranches());
+      branchesWorkbookHelper.close();
       databaseHelper.insertMultipleBranches(branches);
       
       PrintWriter writer = response.getWriter();

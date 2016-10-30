@@ -57,10 +57,10 @@ public class MainWorkbookHelper {
   
       // Check whether all the required columns are present or not
       if (!titles.containsKey("name")) {
-        throw new NullPointerException("The name of the department must come under a column titled \"name\".\nIn case if you don't want to have that information, keep an empty cell under the column containing that title.");
+        throw new NullPointerException("The name of the department must come under a column titled \"name\" in the sheet named \"Head-Office\".\nIn case if you don't want to have that information, keep an empty cell under the column containing that title.");
       }
       if (!titles.containsKey("alias")) {
-        throw new NullPointerException("The alias of the department must come under a column titled \"alias\".\nIn case if you don't want to have that information, keep an empty cell under the column containing that title.");
+        throw new NullPointerException("The alias of the department must come under a column titled \"alias\" in the sheet named \"Head-Office\".\nIn case if you don't want to have that information, keep an empty cell under the column containing that title.");
       }
       
       departments = new ArrayList<>();
@@ -99,16 +99,16 @@ public class MainWorkbookHelper {
   
       // Check whether all the required columns are present or not
       if (!titles.containsKey("name")) {
-        throw new NullPointerException("The name of the branch must come under a column titled \"name\".\nIn case if you don't want to have that information, keep an empty cell under the column containing that title.");
+        throw new NullPointerException("The name of the branch must come under a column titled \"name\" in the sheet named \"Branches\".\nIn case if you don't want to have that information, keep an empty cell under the column containing that title.");
       }
       if (!titles.containsKey("alias")) {
-        throw new NullPointerException("The alias of the branch must come under a column titled \"alias\".\nIn case if you don't want to have that information, keep an empty cell under the column containing that title.");
+        throw new NullPointerException("The alias of the branch must come under a column titled \"alias\" in the sheet named \"Branches\".\nIn case if you don't want to have that information, keep an empty cell under the column containing that title.");
       }
       if (!titles.containsKey("address")) {
-        throw new NullPointerException("The address of the branch must come under a column titled \"address\".\nIn case if you don't want to have that information, keep an empty cell under the column containing that title.");
+        throw new NullPointerException("The address of the branch must come under a column titled \"address\" in the sheet named \"Branches\".\nIn case if you don't want to have that information, keep an empty cell under the column containing that title.");
       }
       if (!titles.containsKey("contactNumber")) {
-        throw new NullPointerException("The contact-number of the branch must come under a column titled \"contactNumber\".\nIn case if you don't want to have that information, keep an empty cell under the column containing that title.");
+        throw new NullPointerException("The contact-number of the branch must come under a column titled \"contactNumber\" in the sheet named \"Branches\".\nIn case if you don't want to have that information, keep an empty cell under the column containing that title.");
       }
     
       branches = new ArrayList<>();
@@ -149,22 +149,22 @@ public class MainWorkbookHelper {
   
       // Check whether all the columns required are present or not
       if (!titles.containsKey("name")) {
-        throw new NullPointerException("The name of the sub-broker must come under a column titled \"name\".\nIn case if you don't want to have that information, keep an empty cell under the column containing that title.");
+        throw new NullPointerException("The name of the sub-broker must come under a column titled \"name\" in the sheet named \"Sub-Brokers\".\nIn case if you don't want to have that information, keep an empty cell under the column containing that title.");
       }
       if (!titles.containsKey("address")) {
-        throw new NullPointerException("The address of the sub-broker must come under a column titled \"address\".\nIn case if you don't want to have that information, keep an empty cell under the column containing that title.");
+        throw new NullPointerException("The address of the sub-broker must come under a column titled \"address\" in the sheet named \"Sub-Brokers\".\nIn case if you don't want to have that information, keep an empty cell under the column containing that title.");
       }
       if (!titles.containsKey("contactNumber")) {
-        throw new NullPointerException("The contact-number of the sub-broker must come under a column titled \"contactNumber\".\nIn case if you don't want to have that information, keep an empty cell under the column containing that title.");
+        throw new NullPointerException("The contact-number of the sub-broker must come under a column titled \"contactNumber\" in the sheet named \"Sub-Brokers\".\nIn case if you don't want to have that information, keep an empty cell under the column containing that title.");
       }
       if (!titles.containsKey("email")) {
-        throw new NullPointerException("The email of the sub-broker must come under a column titled \"email\".\nIn case if you don't want to have that information, keep an empty cell under the column containing that title.");
+        throw new NullPointerException("The email of the sub-broker must come under a column titled \"email\" in the sheet named \"Sub-Brokers\".\nIn case if you don't want to have that information, keep an empty cell under the column containing that title.");
       }
       if (!titles.containsKey("registrationNumber")) {
-        throw new NullPointerException("The registration-number of the sub-broker must come under a column titled \"registrationNumber\".\nIn case if you don't want to have that information, keep an empty cell under the column containing that title.");
+        throw new NullPointerException("The registration-number of the sub-broker must come under a column titled \"registrationNumber\" in the sheet named \"Sub-Brokers\".\nIn case if you don't want to have that information, keep an empty cell under the column containing that title.");
       }
       if (!titles.containsKey("incorporationDate")) {
-        throw new NullPointerException("The incorporation-date of the sub-broker must come under a column titled \"incorporationDate\".\nIn case if you don't want to have that information, keep an empty cell under the column containing that title.");
+        throw new NullPointerException("The incorporation-date of the sub-broker must come under a column titled \"incorporationDate\" in the sheet named \"Sub-Brokers\".\nIn case if you don't want to have that information, keep an empty cell under the column containing that title.");
       }
       
       subBrokers = new ArrayList<>();

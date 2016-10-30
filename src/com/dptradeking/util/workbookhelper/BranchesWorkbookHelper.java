@@ -69,16 +69,16 @@ public class BranchesWorkbookHelper {
   
       // Check whether all the columns required are present or not
       if (!titles.containsKey("name")) {
-        throw new NullPointerException("The name of the executive must come under a column titled \"name\".\nIn case if you don't want to have that information, keep an empty cell under the column containing that title.");
+        throw new NullPointerException("The name of the executive must come under a column titled \"name\" in a sheet named \"" + branchName + "\" in \"branches.xlsx\".\nIn case if you don't want to have that information, keep an empty cell under the column containing that title.");
       }
       if (!titles.containsKey("designation")) {
-        throw new NullPointerException("The designation of the executive must come under a column titled \"designation\".\nIn case if you don't want to have that information, keep an empty cell under the column containing that title.");
+        throw new NullPointerException("The designation of the executive must come under a column titled \"designation\" in a sheet named \"" + branchName + "\" in \"branches.xlsx\".\nIn case if you don't want to have that information, keep an empty cell under the column containing that title.");
       }
       if (!titles.containsKey("contactNumber")) {
-        throw new NullPointerException("The contact-number of the executive must come under a column titled \"contactNumber\".\nIn case if you don't want to have that information, keep an empty cell under the column containing that title.");
+        throw new NullPointerException("The contact-number of the executive must come under a column titled \"contactNumber\" in a sheet named \"" + branchName + "\" in \"branches.xlsx\".\nIn case if you don't want to have that information, keep an empty cell under the column containing that title.");
       }
       if (!titles.containsKey("email")) {
-        throw new NullPointerException("The email of the executive must come under a column titled \"email\".\nIn case if you don't want to have that information, keep an empty cell under the column containing that title.");
+        throw new NullPointerException("The email of the executive must come under a column titled \"email\" in a sheet named \"" + branchName + "\" in \"branches.xlsx\".\nIn case if you don't want to have that information, keep an empty cell under the column containing that title.");
       }
       
       executives = new ArrayList<>();

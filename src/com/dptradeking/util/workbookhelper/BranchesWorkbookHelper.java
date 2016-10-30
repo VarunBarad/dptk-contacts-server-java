@@ -99,7 +99,7 @@ public class BranchesWorkbookHelper {
         if (executive.validateDetails()) {
           executives.add(executive);
         } else {
-          throw new NullPointerException("Invalid details for the executive in row " + (row.getRowNum() + 1) + " for " + branchName + " branch.");
+          throw new NullPointerException("Invalid details for the executive in row " + (row.getRowNum() + 1) + " for " + branchName + " branch in \"branches.xlsx\" file.");
         }
       }
     } else {

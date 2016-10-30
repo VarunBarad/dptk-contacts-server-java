@@ -129,7 +129,7 @@ public class MainWorkbookHelper {
         if (b.validateDetails()) {
           branches.add(b);
         } else {
-          throw new NullPointerException("Invalid details for the branch in row " + (row.getRowNum() + 1));
+          throw new NullPointerException("Invalid details for the branch in row " + (row.getRowNum() + 1) + " of sheet \"Branches\" in file \"main.xlsx\".");
         }
       }
     } else {
@@ -187,7 +187,7 @@ public class MainWorkbookHelper {
         if (s.validateDetails()) {
           subBrokers.add(s);
         } else {
-          throw new NullPointerException("Invalid details for the sub-broker in row " + (row.getRowNum() + 1));
+          throw new NullPointerException("Invalid details for the sub-broker in row " + (row.getRowNum() + 1) + " of sheet \"Sub-Brokers\" in file \"main.xlsx\".");
         }
       }
     } else {

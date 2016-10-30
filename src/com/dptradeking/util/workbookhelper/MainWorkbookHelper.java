@@ -122,12 +122,33 @@ public class MainWorkbookHelper {
     return branches;
   }
   
-  public ArrayList<SubBroker> getSubBrokers() {
+  public ArrayList<SubBroker> getSubBrokers() throws NullPointerException {
     XSSFSheet subBrokersSheet = this.workbook.getSheet("Sub-Brokers");
     ArrayList<SubBroker> subBrokers;
     
     if (subBrokersSheet != null) {
       HashMap<String, Integer> titles = this.getTitles(subBrokersSheet);
+  
+      // Check whether all the columns required are present or not
+      if (!titles.containsKey("name")) {
+        throw new NullPointerException("The name of the sub-broker must come under a column titled \"name\".\nIn case if you don't want to have that information, keep an empty cell under the column containing that title.");
+      }
+      if (!titles.containsKey("address")) {
+        throw new NullPointerException("The address of the sub-broker must come under a column titled \"address\".\nIn case if you don't want to have that information, keep an empty cell under the column containing that title.");
+      }
+      if (!titles.containsKey("contactNumber")) {
+        throw new NullPointerException("The contact-number of the sub-broker must come under a column titled \"contactNumber\".\nIn case if you don't want to have that information, keep an empty cell under the column containing that title.");
+      }
+      if (!titles.containsKey("email")) {
+        throw new NullPointerException("The email of the sub-broker must come under a column titled \"email\".\nIn case if you don't want to have that information, keep an empty cell under the column containing that title.");
+      }
+      if (!titles.containsKey("registrationNumber")) {
+        throw new NullPointerException("The registration-number of the sub-broker must come under a column titled \"registrationNumber\".\nIn case if you don't want to have that information, keep an empty cell under the column containing that title.");
+      }
+      if (!titles.containsKey("incorporationDate")) {
+        throw new NullPointerException("The incorporation-date of the sub-broker must come under a column titled \"incorporationDate\".\nIn case if you don't want to have that information, keep an empty cell under the column containing that title.");
+      }
+      
       subBrokers = new ArrayList<>();
       
       Iterator<Row> rowIterator = subBrokersSheet.rowIterator();
@@ -135,28 +156,25 @@ public class MainWorkbookHelper {
       
       while (rowIterator.hasNext()) {
         Row row = rowIterator.next();
-        
-        try {
-          SubBroker s = new SubBroker(
-              row.getCell(titles.get("name")).getStringCellValue(),
-              row.getCell(titles.get("address")).getStringCellValue(),
-              row.getCell(titles.get("contactNumber")).getStringCellValue(),
-              row.getCell(titles.get("email")).getStringCellValue(),
-              row.getCell(titles.get("registrationNumber")).getStringCellValue(),
-              row.getCell(titles.get("incorporationDate")).getStringCellValue()
-          );
-          
-          if (s.validateDetails()) {
-            subBrokers.add(s);
-          }
-        } catch (NullPointerException e) {
-          e.printStackTrace();
-          //ToDo: Raise a proper exception here
+  
+        SubBroker s = new SubBroker(
+            row.getCell(titles.get("name")).getStringCellValue(),
+            row.getCell(titles.get("address")).getStringCellValue(),
+            row.getCell(titles.get("contactNumber")).getStringCellValue(),
+            row.getCell(titles.get("email")).getStringCellValue(),
+            row.getCell(titles.get("registrationNumber")).getStringCellValue(),
+            row.getCell(titles.get("incorporationDate")).getStringCellValue()
+        );
+  
+        if (s.validateDetails()) {
+          subBrokers.add(s);
+        } else {
+          throw new NullPointerException("Invalid details for the sub-broker in row " + (row.getRowNum() + 1));
         }
       }
     } else {
       subBrokers = null;
-      //ToDo: Raise proper exception here
+      throw new NullPointerException("The details of sub-brokers needs to go in a worksheet named \"Sub-Brokers\".\nIn the case when you don't have any sub-brokers keep an empty sheet by the same name.");
     }
     
     return subBrokers;
@@ -175,7 +193,6 @@ public class MainWorkbookHelper {
       }
     } else {
       titles = null;
-      //ToDo: Raise a proper exception here
     }
     
     return titles;

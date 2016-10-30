@@ -33,36 +33,41 @@ public class RefreshServlet extends HttpServlet {
         Config.Database.DB_NAME
     );
   
-    //ToDo: Show appropriate message to user for missing files or incorrect file names
     MainWorkbookHelper mainWorkbookHelper = MainWorkbookHelper.getInstance(new File(Config.Workbook.FILE_MAIN));
   
     try {
-      if (mainWorkbookHelper != null) {
-        databaseHelper.clearDatabase();
-      
-        ArrayList<SubBroker> subBrokers = mainWorkbookHelper.getSubBrokers();
-        databaseHelper.insertMultipleSubBrokers(subBrokers);
-      
-        ArrayList<Department> departments = mainWorkbookHelper.getDepartments();
-        DepartmentsWorkbookHelper departmentsWorkbookHelper = DepartmentsWorkbookHelper.getInstance(new File(Config.Workbook.FILE_HEAD_OFFICE), departments);
-        departments = new ArrayList<>(departmentsWorkbookHelper.getFilledDepartments());
-        departmentsWorkbookHelper.close();
-        databaseHelper.insertMultipleDepartments(departments);
-      
-        ArrayList<Branch> branches = mainWorkbookHelper.getBranches();
-        BranchesWorkbookHelper branchesWorkbookHelper = BranchesWorkbookHelper.getInstance(new File(Config.Workbook.FILE_BRANCHES), branches);
-        branches = new ArrayList<>(branchesWorkbookHelper.getFilledBranches());
-        branchesWorkbookHelper.close();
-        databaseHelper.insertMultipleBranches(branches);
-      
-        mainWorkbookHelper.close();
-      
-        PrintWriter writer = response.getWriter();
-        writer.write("{\"status\": \"200\", \"message\": \"Database Refreshed\"}");
-        writer.close();
-      } else {
-        System.err.println("File doesn\'t exist");
+      if (mainWorkbookHelper == null) {
+        throw new NullPointerException("Missing \"main.xlsx.\" file.\nPlease make sure that you have the details of all the Head-Office departments, Branches and Sub-Brokers inside a file named \"main.xlsx\".\nEven when you don't have data for some of the categories, keep a blank sheet but do have a file of given name.");
       }
+    
+      databaseHelper.clearDatabase();
+    
+      ArrayList<SubBroker> subBrokers = mainWorkbookHelper.getSubBrokers();
+      databaseHelper.insertMultipleSubBrokers(subBrokers);
+    
+      ArrayList<Department> departments = mainWorkbookHelper.getDepartments();
+      DepartmentsWorkbookHelper departmentsWorkbookHelper = DepartmentsWorkbookHelper.getInstance(new File(Config.Workbook.FILE_HEAD_OFFICE), departments);
+      if (departmentsWorkbookHelper == null) {
+        throw new NullPointerException("Missing \"headOffice.xlsx.\" file.\nPlease make sure that you have the details of all executives of all the departments of Head-Office inside a file named \"headOffice.xlsx\".\nEven when you don't have data for any departments, keep a blank file but do have a file of given name.");
+      }
+      departments = new ArrayList<>(departmentsWorkbookHelper.getFilledDepartments());
+      departmentsWorkbookHelper.close();
+      databaseHelper.insertMultipleDepartments(departments);
+    
+      ArrayList<Branch> branches = mainWorkbookHelper.getBranches();
+      BranchesWorkbookHelper branchesWorkbookHelper = BranchesWorkbookHelper.getInstance(new File(Config.Workbook.FILE_BRANCHES), branches);
+      if (branchesWorkbookHelper == null) {
+        throw new NullPointerException("Missing \"branches.xlsx.\" file.\nPlease make sure that you have the details of all executives of all the branches inside a file named \"branches.xlsx\".\nEven when you don't have data for any branches, keep a blank file but do have a file of given name.");
+      }
+      branches = new ArrayList<>(branchesWorkbookHelper.getFilledBranches());
+      branchesWorkbookHelper.close();
+      databaseHelper.insertMultipleBranches(branches);
+    
+      mainWorkbookHelper.close();
+    
+      PrintWriter writer = response.getWriter();
+      writer.write("{\"status\": \"200\", \"message\": \"Database Refreshed\"}");
+      writer.close();
     } catch (NullPointerException e) {
       e.printStackTrace();
       

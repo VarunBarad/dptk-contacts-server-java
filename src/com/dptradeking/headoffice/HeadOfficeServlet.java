@@ -34,6 +34,8 @@ public class HeadOfficeServlet extends HttpServlet {
   
     final ArrayList<Department> departments = databaseHelper.getDepartments();
   
+    databaseHelper.close();
+  
     Gson gson =
         new GsonBuilder()
             .registerTypeAdapter(ObjectId.class, new ObjectIdAdapter())

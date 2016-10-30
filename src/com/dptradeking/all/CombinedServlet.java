@@ -38,6 +38,8 @@ public class CombinedServlet extends HttpServlet {
     final ArrayList<Branch> branches = databaseHelper.getBranches();
     final ArrayList<SubBroker> subBrokers = databaseHelper.getSubBrokers();
   
+    databaseHelper.close();
+  
     Gson gson =
         new GsonBuilder()
             .registerTypeAdapter(ObjectId.class, new ObjectIdAdapter())

@@ -60,11 +60,13 @@ public class RefreshServlet extends HttpServlet {
       branches = new ArrayList<>(branchesWorkbookHelper.getFilledBranches());
       branchesWorkbookHelper.close();
   
-      databaseHelper.clearDatabase();
-      databaseHelper.insertMultipleSubBrokers(subBrokers);
-      databaseHelper.insertMultipleDepartments(departments);
-      databaseHelper.insertMultipleBranches(branches);
-    
+      databaseHelper
+          .clearDatabase()
+          .insertMultipleSubBrokers(subBrokers)
+          .insertMultipleDepartments(departments)
+          .insertMultipleBranches(branches)
+          .close();
+      
       PrintWriter writer = response.getWriter();
       writer.write("{\"status\": \"200\", \"message\": \"Database Refreshed\"}");
       writer.close();

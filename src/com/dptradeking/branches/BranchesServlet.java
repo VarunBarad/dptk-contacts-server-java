@@ -34,6 +34,8 @@ public class BranchesServlet extends HttpServlet {
   
     final ArrayList<Branch> branches = databaseHelper.getBranches();
   
+    databaseHelper.close();
+  
     Gson gson =
         new GsonBuilder()
             .registerTypeAdapter(ObjectId.class, new ObjectIdAdapter())

@@ -41,24 +41,6 @@ public class DatabaseHelper {
     return subBrokers;
   }
   
-  public String insertSubBroker(SubBroker subBroker) {
-    Document subBrokerDocument = subBroker.toDocument();
-    this.mongoDatabase.getCollection("subBrokers")
-        .insertOne(subBrokerDocument);
-    
-    String insertId = subBrokerDocument.getObjectId("_id").toHexString();
-    return insertId;
-  }
-  
-  public void insertMultipleSubBrokers(ArrayList<SubBroker> subBrokers) {
-    MongoCollection collection = this.mongoDatabase.getCollection("subBrokers");
-    
-    subBrokers
-        .stream()
-        .map(SubBroker::toDocument)
-        .forEach(collection::insertOne);
-  }
-  
   public ArrayList<Branch> getBranches() {
     FindIterable<Document> iterable = this.mongoDatabase.getCollection("branches").find();
     final ArrayList<Branch> branches = new ArrayList<>();
@@ -72,24 +54,6 @@ public class DatabaseHelper {
         .sorted((b1, b2) -> b1.getName().compareTo(b2.getName()));
     
     return branches;
-  }
-  
-  public String insertBranch(Branch branch) {
-    Document branchDocument = branch.toDocument();
-    this.mongoDatabase.getCollection("branches")
-        .insertOne(branchDocument);
-    
-    String insertId = branchDocument.getObjectId("_id").toHexString();
-    return insertId;
-  }
-  
-  public void insertMultipleBranches(ArrayList<Branch> branches) {
-    MongoCollection collection = this.mongoDatabase.getCollection("branches");
-    
-    branches
-        .stream()
-        .map(Branch::toDocument)
-        .forEach(collection::insertOne);
   }
   
   public ArrayList<Department> getDepartments() {
@@ -107,25 +71,40 @@ public class DatabaseHelper {
     return departments;
   }
   
-  public String insertDepartment(Department department) {
-    Document departmentDocument = department.toDocument();
-    this.mongoDatabase.getCollection("headOffice")
-        .insertOne(departmentDocument);
+  public DatabaseHelper insertMultipleSubBrokers(ArrayList<SubBroker> subBrokers) {
+    MongoCollection collection = this.mongoDatabase.getCollection("subBrokers");
     
-    String insertId = departmentDocument.getObjectId("_id").toHexString();
-    return insertId;
+    subBrokers
+        .stream()
+        .map(SubBroker::toDocument)
+        .forEach(collection::insertOne);
+    
+    return this;
   }
   
-  public void insertMultipleDepartments(ArrayList<Department> departments) {
+  public DatabaseHelper insertMultipleBranches(ArrayList<Branch> branches) {
+    MongoCollection collection = this.mongoDatabase.getCollection("branches");
+    
+    branches
+        .stream()
+        .map(Branch::toDocument)
+        .forEach(collection::insertOne);
+    
+    return this;
+  }
+  
+  public DatabaseHelper insertMultipleDepartments(ArrayList<Department> departments) {
     MongoCollection collection = this.mongoDatabase.getCollection("headOffice");
     
     departments
         .stream()
         .map(Department::toDocument)
         .forEach(collection::insertOne);
+    
+    return this;
   }
   
-  public void clearDatabase() {
+  public DatabaseHelper clearDatabase() {
     Document conditionDocument = new Document();
     
     this.mongoDatabase
@@ -139,5 +118,11 @@ public class DatabaseHelper {
     this.mongoDatabase
         .getCollection("headOffice")
         .deleteMany(conditionDocument);
+    
+    return this;
+  }
+  
+  public void close() {
+    this.mongoClient.close();
   }
 }

@@ -36,6 +36,8 @@ public class SubBrokersServlet extends HttpServlet {
     );
     
     final ArrayList<SubBroker> subBrokers = databaseHelper.getSubBrokers();
+  
+    databaseHelper.close();
     
     boolean categorize = Boolean.parseBoolean(request.getParameter(PARAM_CATEGORIZE));
     

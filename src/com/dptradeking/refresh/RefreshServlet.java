@@ -32,6 +32,8 @@ public class RefreshServlet extends HttpServlet {
         Config.Database.DB_HOST,
         Config.Database.DB_NAME
     );
+  
+    //ToDo: Show appropriate message to user for missing files or incorrect file names
     MainWorkbookHelper mainWorkbookHelper = MainWorkbookHelper.getInstance(new File(Config.Workbook.FILE_MAIN));
   
     try {

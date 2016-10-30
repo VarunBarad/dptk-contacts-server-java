@@ -84,12 +84,27 @@ public class MainWorkbookHelper {
     return departments;
   }
   
-  public ArrayList<Branch> getBranches() {
+  public ArrayList<Branch> getBranches() throws NullPointerException {
     XSSFSheet branchesSheet = this.workbook.getSheet("Branches");
     ArrayList<Branch> branches;
     
     if (branchesSheet != null) {
       HashMap<String, Integer> titles = this.getTitles(branchesSheet);
+  
+      // Check whether all the required columns are present or not
+      if (!titles.containsKey("name")) {
+        throw new NullPointerException("The name of the branch must come under a column titled \"name\".\nIn case if you don't want to have that information, keep an empty cell under the column containing that title.");
+      }
+      if (!titles.containsKey("alias")) {
+        throw new NullPointerException("The alias of the branch must come under a column titled \"alias\".\nIn case if you don't want to have that information, keep an empty cell under the column containing that title.");
+      }
+      if (!titles.containsKey("address")) {
+        throw new NullPointerException("The address of the branch must come under a column titled \"address\".\nIn case if you don't want to have that information, keep an empty cell under the column containing that title.");
+      }
+      if (!titles.containsKey("contactNumber")) {
+        throw new NullPointerException("The contact-number of the branch must come under a column titled \"contactNumber\".\nIn case if you don't want to have that information, keep an empty cell under the column containing that title.");
+      }
+    
       branches = new ArrayList<>();
       
       Iterator<Row> rowIterator = branchesSheet.rowIterator();
@@ -97,26 +112,23 @@ public class MainWorkbookHelper {
       
       while (rowIterator.hasNext()) {
         Row row = rowIterator.next();
-        
-        try {
-          Branch b = new Branch(
-              row.getCell(titles.get("name")).getStringCellValue(),
-              row.getCell(titles.get("alias")).getStringCellValue(),
-              row.getCell(titles.get("address")).getStringCellValue(),
-              row.getCell(titles.get("contactNumber")).getStringCellValue()
-          );
-          
-          if (b.validateDetails()) {
-            branches.add(b);
-          }
-        } catch (NullPointerException e) {
-          e.printStackTrace();
-          //ToDo: Raise proper exception here
+  
+        Branch b = new Branch(
+            row.getCell(titles.get("name")).getStringCellValue(),
+            row.getCell(titles.get("alias")).getStringCellValue(),
+            row.getCell(titles.get("address")).getStringCellValue(),
+            row.getCell(titles.get("contactNumber")).getStringCellValue()
+        );
+  
+        if (b.validateDetails()) {
+          branches.add(b);
+        } else {
+          throw new NullPointerException("Invalid details for the branch in row " + (row.getRowNum() + 1));
         }
       }
     } else {
       branches = null;
-      //ToDo: Raise a proper exception here
+      throw new NullPointerException("The details of branches needs to go in a worksheet named \"Branches\" inside the file \"main.xlsx\".\nIn the case when you don't have any branches keep an empty sheet by the same name.");
     }
     
     return branches;

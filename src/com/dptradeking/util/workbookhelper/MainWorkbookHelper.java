@@ -54,6 +54,15 @@ public class MainWorkbookHelper {
     
     if (departmentsSheet != null) {
       HashMap<String, Integer> titles = this.getTitles(departmentsSheet);
+  
+      // Check whether all the required columns are present or not
+      if (!titles.containsKey("name")) {
+        throw new NullPointerException("The name of the department must come under a column titled \"name\".\nIn case if you don't want to have that information, keep an empty cell under the column containing that title.");
+      }
+      if (!titles.containsKey("alias")) {
+        throw new NullPointerException("The alias of the department must come under a column titled \"alias\".\nIn case if you don't want to have that information, keep an empty cell under the column containing that title.");
+      }
+      
       departments = new ArrayList<>();
       
       Iterator<Row> rowIterator = departmentsSheet.rowIterator();
@@ -61,24 +70,21 @@ public class MainWorkbookHelper {
       
       while (rowIterator.hasNext()) {
         Row row = rowIterator.next();
-        
-        try {
-          Department d = new Department(
-              row.getCell(titles.get("name")).getStringCellValue(),
-              row.getCell(titles.get("alias")).getStringCellValue()
-          );
-          
-          if (d.validateDetails()) {
-            departments.add(d);
-          }
-        } catch (NullPointerException e) {
-          e.printStackTrace();
-          //ToDo: Raise proper exception here
+  
+        Department d = new Department(
+            row.getCell(titles.get("name")).getStringCellValue(),
+            row.getCell(titles.get("alias")).getStringCellValue()
+        );
+  
+        if (d.validateDetails()) {
+          departments.add(d);
+        } else {
+          throw new NullPointerException("Invalid details for the department in row " + (row.getRowNum() + 1) + " of sheet \"Head-Office\" in file \"main.xlsx\".");
         }
       }
     } else {
       departments = null;
-      //ToDo: Raise a proper exception here
+      throw new NullPointerException("The details of departments of Head-Office needs to go in a worksheet named \"Head-Office\" inside the file \"main.xlsx\".\nIn the case when you don't have any departments keep an empty sheet by the same name with appropriate column headers.");
     }
     
     return departments;

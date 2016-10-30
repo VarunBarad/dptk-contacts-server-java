@@ -66,6 +66,21 @@ public class DepartmentsWorkbookHelper {
     
     if (executivesSheet != null) {
       HashMap<String, Integer> titles = this.getTitles(executivesSheet);
+  
+      // Check whether all the columns required are present or not
+      if (!titles.containsKey("name")) {
+        throw new NullPointerException("The name of the executive must come under a column titled \"name\".\nIn case if you don't want to have that information, keep an empty cell under the column containing that title.");
+      }
+      if (!titles.containsKey("designation")) {
+        throw new NullPointerException("The designation of the executive must come under a column titled \"designation\".\nIn case if you don't want to have that information, keep an empty cell under the column containing that title.");
+      }
+      if (!titles.containsKey("contactNumber")) {
+        throw new NullPointerException("The contact-number of the executive must come under a column titled \"contactNumber\".\nIn case if you don't want to have that information, keep an empty cell under the column containing that title.");
+      }
+      if (!titles.containsKey("email")) {
+        throw new NullPointerException("The email of the executive must come under a column titled \"email\".\nIn case if you don't want to have that information, keep an empty cell under the column containing that title.");
+      }
+  
       executives = new ArrayList<>();
       
       Iterator<Row> rowIterator = executivesSheet.rowIterator();
@@ -73,26 +88,23 @@ public class DepartmentsWorkbookHelper {
       
       while (rowIterator.hasNext()) {
         Row row = rowIterator.next();
-        
-        try {
-          Executive executive = new Executive(
-              row.getCell(titles.get("name")).getStringCellValue(),
-              row.getCell(titles.get("designation")).getStringCellValue(),
-              row.getCell(titles.get("contactNumber")).getStringCellValue(),
-              row.getCell(titles.get("email")).getStringCellValue()
-          );
-          
-          if (executive.validateDetails()) {
-            executives.add(executive);
-          }
-        } catch (NullPointerException e) {
-          e.printStackTrace();
-          //ToDo: Raise proper exception here
+  
+        Executive executive = new Executive(
+            row.getCell(titles.get("name")).getStringCellValue(),
+            row.getCell(titles.get("designation")).getStringCellValue(),
+            row.getCell(titles.get("contactNumber")).getStringCellValue(),
+            row.getCell(titles.get("email")).getStringCellValue()
+        );
+  
+        if (executive.validateDetails()) {
+          executives.add(executive);
+        } else {
+          throw new NullPointerException("Invalid details for the executive in row " + (row.getRowNum() + 1) + " for " + departmentName + " department in \"headOffice.xlsx\" file.");
         }
       }
     } else {
       executives = null;
-      //ToDo: Raise proper exception here
+      throw new NullPointerException("There is no sheet for " + departmentName + " department in the file \"headOffice.xlsx\".\nPlease make sure that every department entry from the \"main.xlsx\" file has a sheet with same name in the \"headOffice.xlsx\" file with appropriate column headers.");
     }
     
     return executives;
@@ -111,7 +123,6 @@ public class DepartmentsWorkbookHelper {
       }
     } else {
       titles = null;
-      //ToDo: Raise a proper exception here
     }
     
     return titles;

@@ -38,7 +38,6 @@ public class RefreshServlet extends HttpServlet {
       databaseHelper.clearDatabase();
     
       ArrayList<SubBroker> subBrokers = mainWorkbookHelper.getSubBrokers();
-      mainWorkbookHelper.close();
       databaseHelper.insertMultipleSubBrokers(subBrokers);
     
       ArrayList<Department> departments = mainWorkbookHelper.getDepartments();
@@ -52,6 +51,8 @@ public class RefreshServlet extends HttpServlet {
       branches = new ArrayList<>(branchesWorkbookHelper.getFilledBranches());
       branchesWorkbookHelper.close();
       databaseHelper.insertMultipleBranches(branches);
+  
+      mainWorkbookHelper.close();
       
       PrintWriter writer = response.getWriter();
       writer.write("{\"message\": \"Database Refreshed\"}");

@@ -9,6 +9,8 @@ public class Config {
   public static class Database {
     public static final String DB_HOST = "localhost";
     public static final String DB_NAME = "dptradeking";
+    public static final String DB_USER = System.getenv("DB_USERNAME");
+    public static final String DB_PASS = System.getenv("DB_PASSWORD");
   }
   
   public static class Workbook {

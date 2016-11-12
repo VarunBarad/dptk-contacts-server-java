@@ -30,7 +30,9 @@ public class RefreshServlet extends HttpServlet {
   protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     DatabaseHelper databaseHelper = new DatabaseHelper(
         Config.Database.DB_HOST,
-        Config.Database.DB_NAME
+        Config.Database.DB_NAME,
+        Config.Database.DB_USER,
+        Config.Database.DB_PASS
     );
   
     MainWorkbookHelper mainWorkbookHelper = MainWorkbookHelper.getInstance(new File(Config.Workbook.FILE_MAIN));

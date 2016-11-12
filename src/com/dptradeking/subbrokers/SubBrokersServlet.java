@@ -32,7 +32,9 @@ public class SubBrokersServlet extends HttpServlet {
   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     DatabaseHelper databaseHelper = new DatabaseHelper(
         Config.Database.DB_HOST,
-        Config.Database.DB_NAME
+        Config.Database.DB_NAME,
+        Config.Database.DB_USER,
+        Config.Database.DB_PASS
     );
     
     final ArrayList<SubBroker> subBrokers = databaseHelper.getSubBrokers();

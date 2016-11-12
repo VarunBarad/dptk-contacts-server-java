@@ -5,12 +5,15 @@ import com.dptradeking.model.Department;
 import com.dptradeking.model.SubBroker;
 import com.mongodb.Block;
 import com.mongodb.MongoClient;
+import com.mongodb.MongoCredential;
+import com.mongodb.ServerAddress;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Creator: vbarad
@@ -21,8 +24,13 @@ public class DatabaseHelper {
   private MongoClient mongoClient;
   private MongoDatabase mongoDatabase;
   
-  public DatabaseHelper(String hostName, String databaseName) {
-    this.mongoClient = new MongoClient(hostName);
+  public DatabaseHelper(String hostName, String databaseName, String username, String password) {
+    List<MongoCredential> credentials = new ArrayList<>();
+    credentials.add(MongoCredential.createCredential(username, databaseName, password.toCharArray()));
+    
+    ServerAddress hostAddress = new ServerAddress(hostName);
+    
+    this.mongoClient = new MongoClient(hostAddress, credentials);
     this.mongoDatabase = mongoClient.getDatabase(databaseName);
   }
   

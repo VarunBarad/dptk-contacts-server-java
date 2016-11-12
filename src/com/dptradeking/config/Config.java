@@ -6,6 +6,8 @@ package com.dptradeking.config;
  * Project: DP-TradeKING
  */
 public class Config {
+  public static final String AUTH_PASS_HASH = System.getenv("AUTH_PASS_HASH");
+  
   public static class Database {
     public static final String DB_HOST = "localhost";
     public static final String DB_NAME = "dptradeking";

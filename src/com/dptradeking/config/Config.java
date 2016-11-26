@@ -10,14 +10,14 @@ public class Config {
   
   public static class Database {
     public static final String DB_HOST = "localhost";
-    public static final String DB_NAME = "dptradeking";
+    public static final String DB_NAME = "dptkContacts";
     public static final String DB_USER = System.getenv("DB_USERNAME");
     public static final String DB_PASS = System.getenv("DB_PASSWORD");
   }
   
   public static class Workbook {
-    public static final String FILE_MAIN = "/home/vbarad/Documents/Workspace/Projects/DP Trade King/excel-files/main.xlsx";
-    public static final String FILE_HEAD_OFFICE = "/home/vbarad/Documents/Workspace/Projects/DP Trade King/excel-files/headOffice.xlsx";
-    public static final String FILE_BRANCHES = "/home/vbarad/Documents/Workspace/Projects/DP Trade King/excel-files/branches.xlsx";
+    public static final String FILE_MAIN = "/root/contacts/main.xlsx";
+    public static final String FILE_HEAD_OFFICE = "/root/contacts/headOffice.xlsx";
+    public static final String FILE_BRANCHES = "/root/contacts/branches.xlsx";
   }
 }
